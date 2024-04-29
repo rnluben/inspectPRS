@@ -9,7 +9,7 @@
 #' @export
 #'
 #' @examples
-#' prs_quantile_plot(Modeldata=prs_models(PRSdata, "prs", "poag", c("age","sex"), comparison=NA, nquantiles=10), exposure="prs")
+#' prs_quantile_plot(Modeldata=prs_models(PRSdata, "prs", "poag", "age,sex", comparison=NA, nquantiles=10), exposure="prs")
 prs_quantile_plot <- function(Modeldata, exposure) {
    QuantilePlot <- Modeldata %>%
                dplyr::filter(qPRS!="All") %>%

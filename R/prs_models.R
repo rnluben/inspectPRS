@@ -15,31 +15,42 @@ prs_models <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nq
    qExposure <- paste0("q",exposure)
    QExposure <- paste0("Q",exposure)
    comparison_var <- ifelse(is.na(comparison),exposure,comparison)
+   covariates_list <- stringr::str_split_1(covariates, ",")
 
    PRSdata <- PRSdata %>%
-              dplyr::select({{exposure}},{{outcome}},{{comparison_var}},{{covariates}}) %>%
+              dplyr::select({{exposure}},{{outcome}},{{comparison_var}},{{covariates_list}}) %>%
               dplyr::filter(!is.na({{exposure}}) & !is.na({{outcome}})) %>%
               dplyr::mutate("q{exposure}" := statar::xtile(!!as.name(exposure),nquantiles)) %>%
               dplyr::mutate("Q{exposure}" := !!as.name(qExposure))
-   N <- PRSdata %>% count
-   NCase <- PRSdata %>% dplyr::filter(!!as.name(outcome)=="POAG") %>% count
-   NControl <- PRSdata %>% dplyr::filter(!!as.name(outcome)=="Control") %>% count
+   N <- PRSdata %>% dplyr::count()
+   NCase <- PRSdata %>% dplyr::filter(!!as.name(outcome)=="POAG") %>% dplyr::count()
+   NControl <- PRSdata %>% dplyr::filter(!!as.name(outcome)=="Control") %>% dplyr::count()
 
    # Construct models B=Base model, U=Unadjusted model Q=Quantile model C=Continuous model D=Duo (two inputs)
    if(is.na(comparison)) {
-      ModelB <- PRSdata %>% select(OUTCOME={{outcome}}, QQ=all_of(QExposure),age3,sex) %>% stats::glm(OUTCOME ~ sex + age3, data=., family = binomial)
+      ModelB <- PRSdata %>% dplyr::select(OUTCOME={{outcome}}, QQ=all_of(QExposure),{{covariates_list}}) %>%
+                stats::glm(OUTCOME ~ sex + age3, data=., family = binomial)
       ModelBLabel <- "Age and sex"
       comparison_name <- ""
    } else {
-      ModelB <- PRSdata %>% dplyr::select(`Risk score`= {{comparison}}, OUTCOME={{outcome}},age3,sex) %>% stats::glm(OUTCOME ~ `Risk score` + sex + age3, data=., family = binomial)
+      ModelB <- PRSdata %>% dplyr::select(`Risk score`= {{comparison}}, OUTCOME={{outcome}},{{covariates_list}}) %>%
+                stats::glm(OUTCOME ~ `Risk score` + sex + age3, data=., family = binomial)
       ModelBLabel <- paste0(comparison,", age and sex")
       comparison_name <- paste0("_",comparison)
    }
-   ModelU <- PRSdata %>% dplyr::select(`Risk score`=dplyr::all_of(qExposure), OUTCOME={{outcome}}, QQ=all_of(QExposure)) %>% dplyr::mutate(dplyr::across(`Risk score`, as.factor)) %>% dplyr::mutate(`Risk score` = forcats::fct_reorder(`Risk score`, QQ)) %>% stats::glm(OUTCOME ~ `Risk score`, data=., family = binomial)
-   ModelQ <- PRSdata %>% dplyr::select(`Risk score`=dplyr::all_of(qExposure), OUTCOME={{outcome}}, QQ=all_of(QExposure),age3,sex) %>% dplyr::mutate(dplyr::across(`Risk score`, as.factor)) %>% dplyr::mutate(`Risk score` = forcats::fct_reorder(`Risk score`, QQ)) %>% stats::glm(OUTCOME ~ `Risk score` + sex + age3, data=., family = binomial)
-   ModelC <- PRSdata %>% dplyr::select(`Risk score`= {{exposure}}, OUTCOME={{outcome}},age3,sex) %>% stats::glm(OUTCOME ~ `Risk score` + sex + age3, data=., family = binomial)
+   ModelU <- PRSdata %>% dplyr::select(`Risk score`=dplyr::all_of(qExposure), OUTCOME={{outcome}}, QQ=all_of(QExposure)) %>%
+                         dplyr::mutate(dplyr::across(`Risk score`, as.factor)) %>%
+                         dplyr::mutate(`Risk score` = forcats::fct_reorder(`Risk score`, QQ)) %>%
+                         stats::glm(OUTCOME ~ `Risk score`, data=., family = binomial)
+   ModelQ <- PRSdata %>% dplyr::select(`Risk score`=dplyr::all_of(qExposure), OUTCOME={{outcome}}, QQ=all_of(QExposure),{{covariates_list}}) %>%
+                         dplyr::mutate(dplyr::across(`Risk score`, as.factor)) %>%
+                         dplyr::mutate(`Risk score` = forcats::fct_reorder(`Risk score`, QQ)) %>%
+                         stats::glm(OUTCOME ~ `Risk score` + sex + age3, data=., family = binomial)
+   ModelC <- PRSdata %>% dplyr::select(`Risk score`= {{exposure}}, OUTCOME={{outcome}},{{covariates_list}}) %>%
+                         stats::glm(OUTCOME ~ `Risk score` + sex + age3, data=., family = binomial)
    ModelCLabel <- paste0(exposure,", age and sex")
-   ModelQT <- PRSdata %>% dplyr::select(`p-trend`= dplyr::all_of(QExposure), OUTCOME={{outcome}},age3,sex) %>% stats::glm(OUTCOME ~ `p-trend` + sex + age3, data=., family = binomial)
+   ModelQT <- PRSdata %>% dplyr::select(`p-trend`= dplyr::all_of(QExposure), OUTCOME={{outcome}},{{covariates_list}}) %>%
+                          stats::glm(OUTCOME ~ `p-trend` + sex + age3, data=., family = binomial)
 
    N_PRS <- PRSdata %>% dplyr::filter(!is.na({{outcome}})) %>% dplyr::count(!!as.name(qExposure)) %>% dplyr::mutate(qPRS = paste0("Q",!!as.name(qExposure)))
    N_PRS <- PRSdata %>% dplyr::filter(!is.na({{outcome}})) %>% dplyr::count() %>% dplyr::mutate(qPRS="All") %>% dplyr::bind_rows(N_PRS,.)
