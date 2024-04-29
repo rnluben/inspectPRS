@@ -1,15 +1,14 @@
 
 #' A function to draw a quantile plot comparing cases and controls by PRS
 #'
-#' @param PRSdata A dataframe which includes an exposure and outcome
+#' @param Modeldata A dataframe which includes an exposure and outcome
 #' @param exposure A character string containing the name of the exposure variable
-#' @param outcome A character string containing the name of the outcome variable
 #'
 #' @return
 #' @export
 #'
 #' @examples
-#' prs_quantile_plot(Modeldata=prs_models(PRSdata, "prs", "poag", "age,sex", comparison=NA, nquantiles=10), exposure="prs")
+#' prs_quantile_plot(Modeldata=prs_models(PRSdata,"prs","poag","age,sex",nq=10), exposure="prs")
 prs_quantile_plot <- function(Modeldata, exposure) {
    QuantilePlot <- Modeldata %>%
                dplyr::filter(qPRS!="All") %>%

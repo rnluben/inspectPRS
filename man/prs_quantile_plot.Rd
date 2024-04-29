@@ -7,15 +7,13 @@
 prs_quantile_plot(Modeldata, exposure)
 }
 \arguments{
+\item{Modeldata}{A dataframe which includes an exposure and outcome}
+
 \item{exposure}{A character string containing the name of the exposure variable}
-
-\item{PRSdata}{A dataframe which includes an exposure and outcome}
-
-\item{outcome}{A character string containing the name of the outcome variable}
 }
 \description{
 A function to draw a quantile plot comparing cases and controls by PRS
 }
 \examples{
-prs_quantile_plot(Modeldata=prs_models(PRSdata, "prs", "poag", "age,sex", comparison=NA, nquantiles=10), exposure="prs")
+prs_quantile_plot(Modeldata=prs_models(PRSdata,"prs","poag","age,sex",nquantiles=10), exposure="prs")
 }

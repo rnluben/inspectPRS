@@ -5,13 +5,13 @@
 #' @param outcome Character variable containing name of binary outcome variable
 #' @param covariates Character variable containing names of covariates
 #' @param comparison Character variable containing name a secondary PRS
-#' @param nquantiles Number of quantiles
+#' @param nq Number of quantiles
 #'
 #' @return
 #' @export
 #'
 #' @examples
-prs_models <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nquantiles) {
+prs_models <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nq) {
    qExposure <- paste0("q",exposure)
    QExposure <- paste0("Q",exposure)
    comparison_var <- ifelse(is.na(comparison),exposure,comparison)
@@ -20,7 +20,7 @@ prs_models <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nq
    PRSdata <- PRSdata %>%
               dplyr::select({{exposure}},{{outcome}},{{comparison_var}},{{covariates_list}}) %>%
               dplyr::filter(!is.na({{exposure}}) & !is.na({{outcome}})) %>%
-              dplyr::mutate(!!qExposure := statar::xtile(!!as.name(exposure),nquantiles)) %>%
+              dplyr::mutate(!!qExposure := statar::xtile(!!as.name(exposure),nq)) %>%
               dplyr::mutate(!!QExposure := !!as.name(qExposure))
    N <- PRSdata %>% dplyr::count()
    NCase <- PRSdata %>% dplyr::filter(!!as.name(outcome)=="POAG") %>% dplyr::count()
