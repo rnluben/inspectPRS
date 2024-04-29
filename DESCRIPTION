@@ -1,12 +1,22 @@
 Package: InspectPRS
-Title: What the Package Does (One Line, Title Case)
+Title: Displays graphs and text which describe a polygenic risk score
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
+    person("Robert", "Luben", , "r.luben@ucl.ac.uk", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Description: A set of functions that build a short report describing the given polygenic risk score (PRS). Graphs include a denisty plot, a ROC curve and a quantile plot.  Statistics relating to each of these can be incorporated into
+ port.  The structure of the report is normally to split the page into four quadrants with a graph or text box in each.
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
+Imports: 
+    broom,
+    dplyr,
+    forcats,
+    ggplot2,
+    magrittr,
+    statar
+Depends: 
+    R (>= 2.10)
+LazyData: true
