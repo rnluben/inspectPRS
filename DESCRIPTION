@@ -17,7 +17,10 @@ Imports:
     ggplot2,
     magrittr,
     stringr,
-    statar
+    statar,
+    pROC,
+    modelr,
+    tidyr
 Depends: 
     R (>= 2.10)
 LazyData: true

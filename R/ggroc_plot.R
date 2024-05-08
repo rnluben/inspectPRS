@@ -28,8 +28,10 @@ ggroc_plot <- function(PRSdata, exposure, outcome, covariates, comparison=NA) {
       comparison_name <- paste0("_",comparison)
    }
 
-   PRSdata$PredictB <- stats::predict(ModelB, type="response")  # Check that specifying newdata=PRS is necessary !!
-   PRSdata$PredictC <- stats::predict(ModelC, type="response")
+   PRSdata <- PRSdata %>% modelr::add_predictions(ModelB) %>% dplyr::rename(PredictB=pred)
+   PRSdata <- PRSdata %>% modelr::add_predictions(ModelC) %>% dplyr::rename(PredictC=pred)
+#  PRSdata$PredictB <- stats::predict(ModelB, type="response")  # Check that specifying newdata=PRS is necessary !!
+#  PRSdata$PredictC <- stats::predict(ModelC, type="response")
 
    ROC_C <- PRSdata %>% dplyr::select(OUTCOME={{outcome}}, PredictC) %>% pROC::roc(OUTCOME ~ PredictC, data = .)
    CI_C <- ci.auc(ROC_C, method="bootstrap")
@@ -48,9 +50,9 @@ ggroc_plot <- function(PRSdata, exposure, outcome, covariates, comparison=NA) {
                  dplyr::mutate(AUROC=paste0(ModelCLabel,", AUROC = ",round(as.numeric(ROC2),3),"<br>vs<br>",ModelBLabel,", AUROC =  ",round(as.numeric(ROC1),3))) %>% dplyr::select(AUROC) %>% pull
    TitleText <- paste0("Polygenic risk score from \"",exposure,"\" and ",outcome," for ",NCase," cases and ",NControl," controls in EPIC-Norfolk")
    TidyCText <- TidyC %>% dplyr::filter(term=="`Risk score`") %>% dplyr::select(p.value) %>% pull
-   TidyCText <- exp_sup::exp_sup(TidyCText)
+   TidyCText <- exp_sup(TidyCText)
    TidyQText <- TidyQT %>% dplyr::filter(term=="`p-trend`") %>% dplyr::select(p.value) %>% pull
-   TidyQText <- exp_sup::exp_sup(TidyQText)
+   TidyQText <- exp_sup(TidyQText)
 
    AUCLabel <- ROC_C$auc %>% as_tibble %>%
                dplyr::mutate(label_AUC = paste0("AUC = ",round(value,4))) %>%
