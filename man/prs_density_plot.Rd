@@ -17,5 +17,5 @@ prs_density_plot(PRSdata, exposure, outcome)
 A function to draw a density plot comparing cases and controls by PRS
 }
 \examples{
-prs_density_plot(PRSdata, exposure="prs",outcome="poag")
+prs_density_plot(PRSdata, exposure="prs",outcome="disease")
 }

@@ -57,13 +57,13 @@ prs_models <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nq
    TidyC <- broom::tidy(ModelC)
    TidyU <- broom::tidy(ModelU)
    TidyQ <- broom::tidy(ModelQ, conf.int = TRUE, exp = TRUE)
-   TidyQT <- broom::tidy(ModelQT, conf.int = TRUE, exp = TRUE) %>% filter(term=="`p-trend`")
+   TidyQT <- broom::tidy(ModelQT, conf.int = TRUE, exp = TRUE) %>% dplyr::filter(term=="`p-trend`")
    TidyOut <- dplyr::bind_rows(TidyQ,TidyQT) %>%
              dplyr::filter(grepl("Risk score",term)) %>%
              dplyr::add_row(term = "`Risk score`1") %>%
              dplyr::mutate(sortcol = as.numeric(substr(term,13,14))) %>%
              dplyr::arrange(sortcol)
-   TidyOut <- dplyr::bind_rows(TidyOut %>% arrange(sortcol),TidyQT)
+   TidyOut <- dplyr::bind_rows(TidyOut %>% dplyr::arrange(sortcol),TidyQT)
    TidyOut <- dplyr::bind_cols(N_PRS,TidyOut) %>% dplyr::select(-sortcol) %>% dplyr::mutate(dplyr::across(qPRS, as.factor)) %>% dplyr::mutate(qPRS = forcats::fct_reorder(qPRS, !!as.name(qExposure)))
    return(TidyOut)
 }

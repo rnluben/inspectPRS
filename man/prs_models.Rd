@@ -4,7 +4,7 @@
 \alias{prs_models}
 \title{Polygenic risk score modelling functions}
 \usage{
-prs_models(PRSdata, exposure, outcome, covariates, comparison = NA, nquantiles)
+prs_models(PRSdata, exposure, outcome, covariates, comparison = NA, nq)
 }
 \arguments{
 \item{PRSdata}{Data frame containing exposure and outcome}
@@ -17,7 +17,7 @@ prs_models(PRSdata, exposure, outcome, covariates, comparison = NA, nquantiles)
 
 \item{comparison}{Character variable containing name a secondary PRS}
 
-\item{nquantiles}{Number of quantiles}
+\item{nq}{Number of quantiles}
 }
 \description{
 Polygenic risk score modelling functions

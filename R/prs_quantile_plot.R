@@ -8,13 +8,13 @@
 #' @export
 #'
 #' @examples
-#' prs_quantile_plot(Modeldata=prs_models(PRSdata,"prs","poag","age,sex",nq=10), exposure="prs")
+#' prs_quantile_plot(Modeldata=prs_models(PRSdata,"prs","disease","age,sex",nq=10), exposure="prs")
 prs_quantile_plot <- function(Modeldata, exposure) {
    QuantilePlot <- Modeldata %>%
                dplyr::filter(qPRS!="All") %>%
                dplyr::mutate(`Odds ratio (95% confidence interval)` = ifelse(is.na(estimate),1,estimate)) %>%
                dplyr::mutate(`Polygenic risk score quantiles`=qPRS) %>%
-               ggplot2::ggplot(aes(x=`Polygenic risk score quantiles`, y=`Odds ratio (95% confidence interval)`)) +
+               ggplot2::ggplot(ggplot2::aes(x=`Polygenic risk score quantiles`, y=`Odds ratio (95% confidence interval)`)) +
                       ggplot2::geom_point(size = 3) +
                       ggplot2::theme_bw(base_size = 10) +
                       ggplot2::geom_errorbar(ggplot2::aes(ymin=conf.low, ymax=conf.high), width=.1) +

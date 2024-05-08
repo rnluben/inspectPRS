@@ -8,7 +8,7 @@
 #' @export
 #'
 #' @examples
-#' prs_density_plot(PRSdata, exposure="prs",outcome="poag")
+#' prs_density_plot(PRSdata, exposure="prs",outcome="disease")
 prs_density_plot <- function(PRSdata, exposure, outcome) {
    DensityPlot <- PRSdata %>%
                   dplyr::select(OUTCOME={{outcome}}, EXPOSURE={{exposure}}) %>%

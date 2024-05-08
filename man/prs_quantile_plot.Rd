@@ -15,5 +15,5 @@ prs_quantile_plot(Modeldata, exposure)
 A function to draw a quantile plot comparing cases and controls by PRS
 }
 \examples{
-prs_quantile_plot(Modeldata=prs_models(PRSdata,"prs","poag","age,sex",nquantiles=10), exposure="prs")
+prs_quantile_plot(Modeldata=prs_models(PRSdata,"prs","disease","age,sex",nq=10), exposure="prs")
 }
