@@ -28,6 +28,11 @@ ggroc_plot <- function(PRSdata, exposure, outcome, covariates, comparison=NA) {
       comparison_name <- paste0("_",comparison)
    }
 
+   ModelC <- PRSdata %>% dplyr::select(`Risk score`= {{exposure}}, OUTCOME={{outcome}},{{covariates_list}}) %>%
+                         stats::glm(OUTCOME ~ ., data=., family = binomial)
+   ModelCLabel <- paste0(exposure,", ",stringr::str_replace_all(covariates,","," and "))
+
+
    PRSdata <- PRSdata %>% modelr::add_predictions(ModelB) %>% dplyr::rename(PredictB=pred)
    PRSdata <- PRSdata %>% modelr::add_predictions(ModelC) %>% dplyr::rename(PredictC=pred)
 #  PRSdata$PredictB <- stats::predict(ModelB, type="response")  # Check that specifying newdata=PRS is necessary !!
