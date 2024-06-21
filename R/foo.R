@@ -1,0 +1,119 @@
+library(broom)
+library(dplyr)
+library(forcats)
+library(purrr)
+library(ggplot2)
+library(magrittr)
+library(stringr)
+library(statar)
+library(pROC)
+library(modelr)
+library(tidyr)
+
+exp_sup <- function(x, pvalue = 2, boldsig=FALSE, md=FALSE, sig=0.05) {
+   SupStart <-ifelse(md,"^","<sup>")
+   SupEnd <- ifelse(md,"^","</sup>")
+   BoldStart <- ifelse(md,"**","<b>")
+   BoldEnd <- ifelse(md,"**","</b>")
+   p_formatted <- ifelse(is.na(x),"",sprintf(paste0("%4.", pvalue, "f \U00D7 10",SupStart,"%d",SupEnd), x / 10^floor(log10(abs(x))), floor(log10(abs(x)))))
+   ifelse(x < sig &  boldsig, paste0(BoldStart,p_formatted,BoldEnd),p_formatted)
+}
+
+
+
+load("../data/PRSdata.rda")
+exposure="prs"
+outcome="disease"
+covariates="age,sex"
+nquantiles=10
+comparison=NA
+
+   qExposure <- paste0("q",exposure)
+   QExposure <- paste0("Q",exposure)
+   comparison_var <- ifelse(is.na(comparison),exposure,comparison)
+   covariates_list <- stringr::str_split_1(covariates, ",")
+
+   PRSdata <- PRSdata %>%
+              dplyr::select({{exposure}},{{outcome}},{{comparison_var}},{{covariates_list}}) %>%
+              dplyr::filter(!is.na({{exposure}}) & !is.na({{outcome}})) %>%
+              dplyr::mutate(!!qExposure := statar::xtile(!!as.name(exposure),nquantiles)) %>%
+              dplyr::mutate(!!QExposure := !!as.name(qExposure))
+   N <- PRSdata %>% dplyr::count()
+   NCase <- PRSdata %>% dplyr::filter(!!as.name(outcome)=="POAG") %>% dplyr::count()
+   NControl <- PRSdata %>% dplyr::filter(!!as.name(outcome)=="Control") %>% dplyr::count()
+
+   # Construct models B=Base model, U=Unadjusted model Q=Quantile model C=Continuous model D=Duo (two inputs)
+   if(is.na(comparison)) {
+      PRSdataB <- PRSdata %>% dplyr::select(OUTCOME={{outcome}}, {{covariates_list}}) 
+      ModelB <- stats::glm(OUTCOME ~ ., data=PRSdataB, family = binomial)
+      ModelBLabel <- stringr::str_replace_all(covariates,","," and ") 
+      comparison_name <- ""
+   } else {
+      PRSdataB <- PRSdata %>% dplyr::select(`Risk score`= {{comparison_var}}, OUTCOME={{outcome}},{{covariates_list}})
+      ModelB <- stats::glm(OUTCOME ~ ., data=PRSdataB, family = binomial)
+      ModelBLabel <- paste0(comparison,", ",stringr::str_replace_all(covariates,","," and "))
+      comparison_name <- paste0("_",comparison)
+   }
+   ModelU <- PRSdata %>% dplyr::select(`Risk score`=dplyr::all_of(qExposure), OUTCOME={{outcome}}, QQ=all_of(QExposure)) %>%
+                         dplyr::mutate(dplyr::across(`Risk score`, as.factor)) %>%
+                         dplyr::mutate(`Risk score` = forcats::fct_reorder(`Risk score`, QQ)) %>% 
+                         stats::glm(OUTCOME ~ `Risk score`, data=., family = binomial)
+   ModelQ <- PRSdata %>% dplyr::select(`Risk score`=dplyr::all_of(qExposure), OUTCOME={{outcome}}, QQ=all_of(QExposure),{{covariates_list}}) %>%
+                         dplyr::mutate(dplyr::across(`Risk score`, as.factor)) %>% 
+                         dplyr::mutate(`Risk score` = forcats::fct_reorder(`Risk score`, QQ)) %>% dplyr::select(-QQ) %>% 
+                         stats::glm(OUTCOME ~ ., data=., family = binomial)
+   PRSdataC <- PRSdata %>% dplyr::select(`Risk score`= {{exposure}}, OUTCOME={{outcome}},{{covariates_list}})
+   ModelC <-             stats::glm(OUTCOME ~ ., data=PRSdataC, family = binomial)
+   ModelCLabel <- paste0(exposure,", ",stringr::str_replace_all(covariates,","," and "))
+   ModelQT <- PRSdata %>% dplyr::select(`p-trend`= dplyr::all_of(QExposure), OUTCOME={{outcome}},{{covariates_list}}) %>% 
+                          stats::glm(OUTCOME ~ ., data=., family = binomial)
+
+   N_PRS <- PRSdata %>% dplyr::filter(!is.na({{outcome}})) %>% dplyr::count(!!as.name(qExposure)) %>% dplyr::mutate(qPRS = paste0("Q",!!as.name(qExposure)))
+   N_PRS <- PRSdata %>% dplyr::filter(!is.na({{outcome}})) %>% dplyr::count() %>% dplyr::mutate(qPRS="All") %>% dplyr::bind_rows(N_PRS,.)
+   TidyC <- broom::tidy(ModelC)
+   TidyU <- broom::tidy(ModelU)
+   TidyQ <- broom::tidy(ModelQ, conf.int = TRUE, exp = TRUE)
+   TidyQT <- broom::tidy(ModelQT, conf.int = TRUE, exp = TRUE) %>% dplyr::filter(term=="`p-trend`")
+   TidyOut <- dplyr::bind_rows(TidyQ,TidyQT) %>%
+             dplyr::filter(grepl("Risk score",term)) %>%
+             dplyr::add_row(term = "Risk score1") %>%
+             dplyr::mutate(sortcol = as.numeric(substr(term,13,14))) %>%
+             dplyr::arrange(sortcol)
+   TidyOut <- dplyr::bind_rows(TidyOut %>% dplyr::arrange(sortcol),TidyQT)
+   TidyOut <- dplyr::bind_cols(N_PRS,TidyOut) %>% dplyr::select(-sortcol) %>%
+              dplyr::mutate(dplyr::across(qPRS, as.factor)) %>%
+              dplyr::mutate(qPRS = forcats::fct_reorder(qPRS, !!as.name(qExposure)))
+
+   PRSdataB <- PRSdataB %>% modelr::add_predictions(ModelB) %>% dplyr::rename(PredictB=pred)
+   PRSdataC <- PRSdataC %>% modelr::add_predictions(ModelC) %>% dplyr::rename(PredictC=pred)
+#  PRSdata$PredictB <- stats::predict(ModelB, type="response")  # Check that specifying newdata=PRS is necessary !!
+#  PRSdata$PredictC <- stats::predict(ModelC, type="response")
+
+   ROC_C <- PRSdataC %>% pROC::roc(OUTCOME ~ PredictC, data = .)
+   CI_C <- pROC::ci.auc(ROC_C, method="bootstrap")
+   ROC_B <- PRSdataB %>% pROC::roc(OUTCOME ~ PredictB, data = .)
+   CI_B <- pROC::ci.auc(ROC_B, method="bootstrap")
+
+   # Test difference in ROC curves.  Methods bootstrap, venkatraman and specificity all give similar results
+   BASE <- ROC_B
+   BASEPRS <- ROC_C
+   Delong <- pROC::roc.test(BASE, BASEPRS, paired=TRUE, method="delong")
+   print(Delong)
+   DelongText <- paste(capture.output(Delong), collapse="<br>")
+   DelongPValue <- exp_sup(Delong$p.value)
+   DelongROC1  <- Delong$roc1$auc
+   DelongROC2  <- Delong$roc2$auc
+   TitleText <- paste0("Polygenic risk score from \"",exposure,"\" and ",outcome," for ",NCase," cases and ",NControl," controls in EPIC-Norfolk")
+   TidyCText <- TidyC %>% dplyr::filter(term=="`Risk score`") %>% dplyr::select(p.value) %>% dplyr::pull()
+   TidyCText <- exp_sup(TidyCText)
+   TidyQText <- TidyQT %>% dplyr::filter(term=="`p-trend`") %>% dplyr::select(p.value) %>% dplyr::pull()
+   TidyQText <- exp_sup(TidyQText)
+
+   AUCLabel <- ROC_C$auc %>% tibble::as_tibble() %>%
+               dplyr::mutate(label_AUC = paste0("AUC = ",round(value,4))) %>%
+               dplyr::bind_rows(.id = "name") %>%
+               dplyr::mutate(name = paste0("PRS: ", exposure," Outcome: ",outcome," adjusted for age and sex"))
+
+
+   ReturnList <- list(TidyOut=TidyOut,TidyCText=TidyCText, AUCLabel=AUCLabel)
+   return(ReturnList)

@@ -22,13 +22,13 @@ ggroc_plot <- function(PRSdata, exposure, outcome, covariates, comparison=NA) {
       ModelBLabel <- stringr::str_replace_all(covariates,","," and ") 
       comparison_name <- ""
    } else {
-      ModelB <- PRSdata %>% dplyr::select(`Risk score`= {{comparison}}, OUTCOME={{outcome}},{{covariates_list}}) %>%
+      ModelB <- PRSdata %>% dplyr::select(Riskscore= {{comparison}}, OUTCOME={{outcome}},{{covariates_list}}) %>%
                 stats::glm(OUTCOME ~ ., data=., family = binomial)
       ModelBLabel <- paste0(comparison,", ",stringr::str_replace_all(covariates,","," and "))
       comparison_name <- paste0("_",comparison)
    }
 
-   ModelC <- PRSdata %>% dplyr::select(`Risk score`= {{exposure}}, OUTCOME={{outcome}},{{covariates_list}}) %>%
+   ModelC <- PRSdata %>% dplyr::select(Riskscore= {{exposure}}, OUTCOME={{outcome}},{{covariates_list}}) %>%
                          stats::glm(OUTCOME ~ ., data=., family = binomial)
    ModelCLabel <- paste0(exposure,", ",stringr::str_replace_all(covariates,","," and "))
 
@@ -44,9 +44,9 @@ ggroc_plot <- function(PRSdata, exposure, outcome, covariates, comparison=NA) {
    CI_B <- ci.auc(ROC_B, method="bootstrap")
 
    # Test difference in ROC curves.  Methods bootstrap, venkatraman and specificity all give similar results
-   `Age+Sex` <- ROC_B
-   `Age+Sex+PRS` <- ROC_C
-   Delong <- pROC::roc.test(`Age+Sex`, `Age+Sex+PRS`, paired=TRUE, method="delong")
+   BASE <- ROC_B
+   BASEPRS <- ROC_C
+   Delong <- pROC::roc.test(BASE, BASEPRS, paired=TRUE, method="delong")
    print(Delong)
    DelongText <- paste(capture.output(Delong), collapse="<br>")
    DelongPValue <- capture.output(Delong) %>% as_tibble %>% dplyr::filter(grepl("p-value",value)) %>% tidyr::separate(value, c(NA, "pvalue"), ", ") %>% tidyr::separate(pvalue, c(NA,NA,"P")," ")  %>% pull 
@@ -54,7 +54,7 @@ ggroc_plot <- function(PRSdata, exposure, outcome, covariates, comparison=NA) {
    DelongROC  <- capture.output(Delong) %>% as_tibble %>% dplyr::filter(row_number()==11) %>% tidyr::separate(value, c(NA,"ROC1","ROC2"), "  ") %>%
                  dplyr::mutate(AUROC=paste0(ModelCLabel,", AUROC = ",round(as.numeric(ROC2),3),"<br>vs<br>",ModelBLabel,", AUROC =  ",round(as.numeric(ROC1),3))) %>% dplyr::select(AUROC) %>% pull
    TitleText <- paste0("Polygenic risk score from \"",exposure,"\" and ",outcome," for ",NCase," cases and ",NControl," controls in EPIC-Norfolk")
-   TidyCText <- TidyC %>% dplyr::filter(term=="`Risk score`") %>% dplyr::select(p.value) %>% pull
+   TidyCText <- TidyC %>% dplyr::filter(term=="Riskscore") %>% dplyr::select(p.value) %>% pull
    TidyCText <- exp_sup(TidyCText)
    TidyQText <- TidyQT %>% dplyr::filter(term=="`p-trend`") %>% dplyr::select(p.value) %>% pull
    TidyQText <- exp_sup(TidyQText)

@@ -14,6 +14,7 @@ Imports:
     broom,
     dplyr,
     forcats,
+    purrr,
     ggplot2,
     magrittr,
     stringr,
