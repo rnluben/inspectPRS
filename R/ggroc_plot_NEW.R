@@ -23,7 +23,7 @@ ggroc_plot <- function(PRSdata, exposure, outcome, covariates, comparison=NA,nqu
               ggplot2::theme_bw() +
               ggplot2::labs(color='')  +
               ggplot2::scale_color_manual(labels = c(ModelOutput$ModelBLabel,ModelOutput$ModelCLabel) ,values = c("blue", "red")) +
-              ggplot2::theme(text = ggplot2::element_text(size = 20))
+              ggplot2::theme(text = ggplot2::element_text(size = 20)) + ggplot2::theme(aspect.ratio = 1)
 
    return(ggROC_D)
 }

@@ -20,6 +20,8 @@ Imports:
     stringr,
     statar,
     pROC,
+    ggtext,
+    patchwork,
     modelr
 Depends: 
     R (>= 2.10)
