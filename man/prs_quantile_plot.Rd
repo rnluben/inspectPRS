@@ -4,16 +4,22 @@
 \alias{prs_quantile_plot}
 \title{A function to draw a quantile plot comparing cases and controls by PRS}
 \usage{
-prs_quantile_plot(Modeldata, exposure)
+prs_quantile_plot(PRSdata, exposure, outcome, covariates, nquantiles)
 }
 \arguments{
-\item{Modeldata}{A dataframe which includes an exposure and outcome}
+\item{PRSdata}{A dataframe which includes an exposure and outcome}
 
-\item{exposure}{A character string containing the name of the exposure variable}
+\item{exposure}{A character string containing the name of the polygenic risk score}
+
+\item{outcome}{A character string containing the name of the outcome variable}
+
+\item{covariates}{A character string containing a comma separated variable list of covariates}
+
+\item{nquantiles}{Number of quantiles}
 }
 \description{
 A function to draw a quantile plot comparing cases and controls by PRS
 }
 \examples{
-prs_quantile_plot(Modeldata=prs_models(PRSdata,"prs","disease","age,sex",nq=10), exposure="prs")
+prs_quantile_plot(PRSdata,exposure="prs",outcome="disease",covariates="age,sex",nquantiles=10)
 }

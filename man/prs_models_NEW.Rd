@@ -24,7 +24,7 @@ prs_models_NEW(
 
 \item{comparison}{Character variable containing name a secondary PRS}
 
-\item{nq}{Number of quantiles}
+\item{nquantiles}{Number of quantiles}
 }
 \description{
 Polygenic risk score modelling functions

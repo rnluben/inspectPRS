@@ -1,16 +1,22 @@
 
 #' A function to draw a quantile plot comparing cases and controls by PRS
 #'
-#' @param Modeldata A dataframe which includes an exposure and outcome
-#' @param exposure A character string containing the name of the exposure variable
+#' @param PRSdata A dataframe which includes an exposure and outcome
+#' @param exposure A character string containing the name of the polygenic risk score 
+#' @param outcome A character string containing the name of the outcome variable
+#' @param covariates A character string containing a comma separated variable list of covariates
+#' @param nquantiles Number of quantiles 
 #'
 #' @return
 #' @export
 #'
 #' @examples
-#' prs_quantile_plot(Modeldata=prs_models(PRSdata,"prs","disease","age,sex",nq=10), exposure="prs")
-prs_quantile_plot <- function(Modeldata, exposure) {
-   QuantilePlot <- Modeldata %>%
+#' prs_quantile_plot(PRSdata,exposure="prs",outcome="disease",covariates="age,sex",nquantiles=10)
+prs_quantile_plot <- function(PRSdata,exposure,outcome,covariates,nquantiles) {
+
+   ModelOutput <- prs_models_NEW(PRSdata, exposure, outcome, covariates, comparison=NA, nquantiles)
+
+   QuantilePlot <- ModelOutput$TidyOut %>%
                dplyr::filter(qPRS!="All") %>%
                dplyr::mutate(`Odds ratio (95% confidence interval)` = ifelse(is.na(estimate),1,estimate)) %>%
                dplyr::mutate(`Polygenic risk score quantiles`=qPRS) %>%

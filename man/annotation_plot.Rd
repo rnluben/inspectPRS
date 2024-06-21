@@ -16,19 +16,15 @@ annotation_plot(
 \arguments{
 \item{PRSdata}{A dataframe which includes an exposure and outcome}
 
-\item{exposure}{A character string containing the name of the exposure variable}
+\item{exposure}{A character string containing the name of the polygenic risk score}
 
 \item{outcome}{A character string containing the name of the outcome variable}
 
-\item{TidyCText}{blah}
+\item{covariates}{A character string containing a comma separated variable list of covariates}
 
-\item{DelongROC}{blah}
+\item{comparison}{A character string which if not NA contains the name of a comparison PRS}
 
-\item{DelongPValue}{blah}
-
-\item{nq}{Number of quantiles}
-
-\item{TidyQText}{blah}
+\item{nquantiles}{Number of quantiles}
 }
 \description{
 A function to draw a density plot comparing cases and controls by PRS
