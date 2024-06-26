@@ -7,7 +7,7 @@
 #' @param comparison Character variable containing name a secondary PRS
 #' @param nquantiles Number of quantiles
 #'
-#' @return
+#' @return A patchwork ggplot object.
 #' @export
 #'
 #' @examples

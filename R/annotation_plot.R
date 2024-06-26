@@ -7,7 +7,7 @@
 #' @param comparison A character string which if not NA contains the name of a comparison PRS
 #' @param nquantiles Number of quantiles
 #'
-#' @return
+#' @return A ggplot object.
 #' @export
 #'
 #' @examples

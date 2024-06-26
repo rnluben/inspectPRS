@@ -6,7 +6,7 @@
 #' @param md Whether to use markdown or HTML
 #' @param sig A number vector of the significance level
 #'
-#' @return
+#' @return A string.
 #' @export
 #'
 #' @examples

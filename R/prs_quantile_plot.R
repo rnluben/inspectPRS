@@ -7,7 +7,7 @@
 #' @param covariates A character string containing a comma separated variable list of covariates
 #' @param nquantiles Number of quantiles
 #'
-#' @return
+#' @return A ggplot object.
 #' @export
 #'
 #' @examples

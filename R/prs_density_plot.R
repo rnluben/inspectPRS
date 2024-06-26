@@ -4,7 +4,7 @@
 #' @param exposure A character string containing the name of the exposure variable
 #' @param outcome A character string containing the name of the outcome variable
 #'
-#' @return
+#' @return A ggplot object.
 #' @export
 #'
 #' @examples

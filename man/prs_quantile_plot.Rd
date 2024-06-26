@@ -17,9 +17,14 @@ prs_quantile_plot(PRSdata, exposure, outcome, covariates, nquantiles)
 
 \item{nquantiles}{Number of quantiles}
 }
+\value{
+A ggplot object.
+}
 \description{
 A function to draw a quantile plot comparing cases and controls by PRS
 }
 \examples{
+\dontrun{
 prs_quantile_plot(PRSdata,exposure="prs",outcome="disease",covariates="age,sex",nquantiles=10)
+}
 }

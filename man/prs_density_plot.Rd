@@ -13,9 +13,14 @@ prs_density_plot(PRSdata, exposure, outcome)
 
 \item{outcome}{A character string containing the name of the outcome variable}
 }
+\value{
+A ggplot object.
+}
 \description{
 A function to draw a density plot comparing cases and controls by PRS
 }
 \examples{
+\dontrun{
 prs_density_plot(PRSdata, exposure="prs",outcome="disease")
+}
 }

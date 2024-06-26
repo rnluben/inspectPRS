@@ -19,9 +19,14 @@ ggroc_plot(PRSdata, exposure, outcome, covariates, comparison = NA, nquantiles)
 
 \item{nquantiles}{Number of quantiles}
 }
+\value{
+A ggplot object.
+}
 \description{
 A function to draw a density plot comparing cases and controls by PRS
 }
 \examples{
+\dontrun{
 ggroc_plot(PRSdata, exposure="prs",outcome="disease",covariates="age,sex",nquantiles=10)
+}
 }

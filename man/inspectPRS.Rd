@@ -19,9 +19,14 @@ inspectPRS(PRSdata, exposure, outcome, covariates, comparison = NA, nquantiles)
 
 \item{nquantiles}{Number of quantiles}
 }
+\value{
+A patchwork ggplot object.
+}
 \description{
 A patchwork of plots and PRS summary statistics for an overview of Polygenic Risk Scores
 }
 \examples{
+\dontrun{
 inspectPRS(PRSdata, exposure="prs",outcome="disease",covariates="age,sex",nquantiles=10)
+}
 }

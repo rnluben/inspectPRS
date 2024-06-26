@@ -19,9 +19,14 @@ prs_models(PRSdata, exposure, outcome, covariates, comparison = NA, nquantiles)
 
 \item{nquantiles}{Number of quantiles}
 }
+\value{
+A list.
+}
 \description{
 Polygenic risk score modelling functions
 }
 \examples{
+\dontrun{
 prs_models(PRSdata,exposure="prs",outcome="disease",covariates="age,sex",nquantiles=10)
+}
 }
