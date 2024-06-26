@@ -3,7 +3,7 @@
 #' @param PRSdata Data frame containing exposure and outcome
 #' @param exposure Character variable containing name of polygenic risk score variable
 #' @param outcome Character variable containing name of binary outcome variable
-#' @param covariates Character variable containing names of covariates
+#' @param covariates Character vector containing names of covariates
 #' @param comparison Character variable containing name a secondary PRS
 #' @param nquantiles Number of quantiles
 #'
@@ -12,16 +12,15 @@
 #'
 #' @examples
 #' \dontrun{
-#' prs_models(PRSdata,exposure="prs",outcome="disease",covariates="age,sex",nquantiles=10)
+#' prs_models(PRSdata,exposure="prs",outcome="disease",covariates= c("age", "sex"),nquantiles=10)
 #' }
 prs_models <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nquantiles) {
    qExposure <- paste0("q",exposure)
    QExposure <- paste0("Q",exposure)
    comparison_var <- ifelse(is.na(comparison),exposure,comparison)
-   covariates_list <- stringr::str_split_1(covariates, ",")
 
    PRSdata <- PRSdata %>%
-              dplyr::select({{exposure}},{{outcome}},{{comparison_var}},{{covariates_list}}) %>%
+              dplyr::select({{exposure}},{{outcome}},{{comparison_var}},{{covariates}}) %>%
               dplyr::filter(!is.na({{exposure}}) & !is.na({{outcome}})) %>%
               dplyr::mutate(!!qExposure := statar::xtile(!!as.name(exposure),nquantiles)) %>%
               dplyr::mutate(!!QExposure := !!as.name(qExposure))
@@ -31,12 +30,12 @@ prs_models <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nq
 
    # Construct models B=Base model, U=Unadjusted model Q=Quantile model C=Continuous model D=Duo (two inputs)
    if(is.na(comparison)) {
-      PRSdataB <- PRSdata %>% dplyr::select(OUTCOME={{outcome}}, {{covariates_list}})
+      PRSdataB <- PRSdata %>% dplyr::select(OUTCOME={{outcome}}, {{covariates}})
       ModelB <- stats::glm(OUTCOME ~ ., data=PRSdataB, family = stats::binomial)
       ModelBLabel <- stringr::str_replace_all(covariates,","," and ")
       comparison_name <- ""
    } else {
-      PRSdataB <- PRSdata %>% dplyr::select(`Risk score`= {{comparison_var}}, OUTCOME={{outcome}},{{covariates_list}})
+      PRSdataB <- PRSdata %>% dplyr::select(`Risk score`= {{comparison_var}}, OUTCOME={{outcome}},{{covariates}})
       ModelB <- stats::glm(OUTCOME ~ ., data=PRSdataB, family = stats::binomial)
       ModelBLabel <- paste0(comparison,", ",stringr::str_replace_all(covariates,","," and "))
       comparison_name <- paste0("_",comparison)
@@ -45,14 +44,14 @@ prs_models <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nq
                          dplyr::mutate(dplyr::across(`Risk score`, as.factor)) %>%
                          dplyr::mutate(`Risk score` = forcats::fct_reorder(`Risk score`, QQ)) %>%
                          stats::glm(OUTCOME ~ `Risk score`, data=., family = stats::binomial)
-   ModelQ <- PRSdata %>% dplyr::select(`Risk score`=dplyr::all_of(qExposure), OUTCOME={{outcome}}, QQ=dplyr::all_of(QExposure),{{covariates_list}}) %>%
+   ModelQ <- PRSdata %>% dplyr::select(`Risk score`=dplyr::all_of(qExposure), OUTCOME={{outcome}}, QQ=dplyr::all_of(QExposure),{{covariates}}) %>%
                          dplyr::mutate(dplyr::across(`Risk score`, as.factor)) %>%
                          dplyr::mutate(`Risk score` = forcats::fct_reorder(`Risk score`, QQ)) %>% dplyr::select(-QQ) %>%
                          stats::glm(OUTCOME ~ ., data=., family = stats::binomial)
-   PRSdataC <- PRSdata %>% dplyr::select(`Risk score`= {{exposure}}, OUTCOME={{outcome}},{{covariates_list}})
+   PRSdataC <- PRSdata %>% dplyr::select(`Risk score`= {{exposure}}, OUTCOME={{outcome}},{{covariates}})
    ModelC <-             stats::glm(OUTCOME ~ ., data=PRSdataC, family = stats::binomial)
    ModelCLabel <- paste0(exposure,", ",stringr::str_replace_all(covariates,","," and "))
-   ModelQT <- PRSdata %>% dplyr::select(`p-trend`= dplyr::all_of(QExposure), OUTCOME={{outcome}},{{covariates_list}}) %>%
+   ModelQT <- PRSdata %>% dplyr::select(`p-trend`= dplyr::all_of(QExposure), OUTCOME={{outcome}},{{covariates}}) %>%
                           stats::glm(OUTCOME ~ ., data=., family = stats::binomial)
 
    N_PRS <- PRSdata %>% dplyr::filter(!is.na({{outcome}})) %>% dplyr::count(!!as.name(qExposure)) %>% dplyr::mutate(qPRS = paste0("Q",!!as.name(qExposure)))

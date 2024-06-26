@@ -3,7 +3,7 @@
 #' @param PRSdata A dataframe which includes an exposure and outcome
 #' @param exposure A character string containing the name of the polygenic risk score
 #' @param outcome A character string containing the name of the outcome variable
-#' @param covariates A character string containing a comma separated variable list of covariates
+#' @param covariates A character vector containing names of covariates
 #' @param comparison A character string which if not NA contains the name of a comparison PRS
 #' @param nquantiles Number of quantiles
 #'
@@ -12,7 +12,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' annotation_plot(PRSdata, exposure="prs",outcome="disease", covariates="age,sex", nquantiles=10)
+#' annotation_plot(PRSdata, exposure="prs",outcome="disease", covariates=c("age" ,"sex"), nquantiles=10)
 #' }
 annotation_plot <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nquantiles ) {
 

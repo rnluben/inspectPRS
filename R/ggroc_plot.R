@@ -3,7 +3,7 @@
 #' @param PRSdata A dataframe which includes an exposure and outcome
 #' @param exposure A character string containing the name of the exposure variable
 #' @param outcome A character string containing the name of the outcome variable
-#' @param covariates Character variable containing names of covariates
+#' @param covariates Character vector containing names of covariates
 #' @param comparison Character variable containing name a secondary PRS
 #' @param nquantiles Number of quantiles
 #'
@@ -12,7 +12,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' ggroc_plot(PRSdata, exposure="prs",outcome="disease",covariates="age,sex",nquantiles=10)
+#' ggroc_plot(PRSdata, exposure="prs",outcome="disease",covariates=c("age", "sex"),nquantiles=10)
 #' }
 ggroc_plot <- function(PRSdata, exposure, outcome, covariates, comparison=NA,nquantiles) {
 
