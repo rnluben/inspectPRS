@@ -8,12 +8,14 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' prs_density_plot(PRSdata, exposure="prs",outcome="disease")
+#' }
 prs_density_plot <- function(PRSdata, exposure, outcome) {
    DensityPlot <- PRSdata %>%
                   dplyr::select(OUTCOME={{outcome}}, EXPOSURE={{exposure}}) %>%
-                  dplyr::filter(!is.na(OUTCOME)) %>% 
-                  dplyr::mutate(OUTCOME = as.factor(OUTCOME)) %>% 
+                  dplyr::filter(!is.na(OUTCOME)) %>%
+                  dplyr::mutate(OUTCOME = as.factor(OUTCOME)) %>%
                   ggplot2::ggplot(ggplot2::aes(x = EXPOSURE, colour = OUTCOME)) +
                          ggplot2::geom_density() +
                          ggplot2::theme_bw() +

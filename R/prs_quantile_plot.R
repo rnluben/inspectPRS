@@ -11,7 +11,9 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' prs_quantile_plot(PRSdata,exposure="prs",outcome="disease",covariates="age,sex",nquantiles=10)
+#' }
 prs_quantile_plot <- function(PRSdata,exposure,outcome,covariates,nquantiles) {
 
    ModelOutput <- prs_models(PRSdata, exposure, outcome, covariates, comparison=NA, nquantiles)

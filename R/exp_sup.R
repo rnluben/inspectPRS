@@ -10,8 +10,10 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' exp_sup(0.00000456)
 #' exp_sup(0.002, md=TRUE, boldsig=TRUE)
+#' }
 exp_sup <- function(x, pvalue = 2, boldsig=FALSE, md=FALSE, sig=0.05) {
    SupStart <-ifelse(md,"^","<sup>")
    SupEnd <- ifelse(md,"^","</sup>")

@@ -1,18 +1,19 @@
-#' A patchwork of plots and PRS summary statistics for an overview of Polygenic Risk Scores 
+#' A patchwork of plots and PRS summary statistics for an overview of Polygenic Risk Scores
 #'
 #' @param PRSdata A dataframe which includes an exposure and outcome
 #' @param exposure A character string containing the name of the exposure variable
 #' @param outcome A character string containing the name of the outcome variable
 #' @param covariates Character variable containing names of covariates
 #' @param comparison Character variable containing name a secondary PRS
-#' @param nquantiles Number of quantiles 
+#' @param nquantiles Number of quantiles
 #'
 #' @return
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' inspectPRS(PRSdata, exposure="prs",outcome="disease",covariates="age,sex",nquantiles=10)
-
+#' }
 inspectPRS <- function(PRSdata, exposure, outcome, covariates, comparison=NA,nquantiles) {
 
    plot1 <- prs_density_plot(PRSdata, exposure="prs",outcome="disease")
