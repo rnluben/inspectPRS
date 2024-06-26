@@ -2,7 +2,7 @@
 % Please edit documentation in R/inspectPRS.R
 \name{inspectPRS}
 \alias{inspectPRS}
-\title{A patchwork of plots and PRS statistics for an overall summary of a PRS}
+\title{A patchwork of plots and PRS summary statistics for an overview of Polygenic Risk Scores}
 \usage{
 inspectPRS(PRSdata, exposure, outcome, covariates, comparison = NA, nquantiles)
 }
@@ -20,7 +20,7 @@ inspectPRS(PRSdata, exposure, outcome, covariates, comparison = NA, nquantiles)
 \item{nquantiles}{Number of quantiles}
 }
 \description{
-A patchwork of plots and PRS statistics for an overall summary of a PRS
+A patchwork of plots and PRS summary statistics for an overview of Polygenic Risk Scores
 }
 \examples{
 inspectPRS(PRSdata, exposure="prs",outcome="disease",covariates="age,sex",nquantiles=10)

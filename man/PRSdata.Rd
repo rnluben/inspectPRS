@@ -3,28 +3,25 @@
 \docType{data}
 \name{PRSdata}
 \alias{PRSdata}
-\title{EPIC-Norfolk polygenic risk score data}
+\title{Synthetic polygenic risk score data}
 \format{
 \subsection{\code{PRSdata}}{
 
 A data frame with 50 rows and 5 columns:
 \describe{
 \item{id}{Anonymous identifier}
-\item{age}{Age at recruitment}
+\item{age}{Age in years}
 \item{sex}{Biological sex 1=man 2=woman}
 \item{prs}{A polygenic risk score}
-\item{poag}{Primary open angle glaucoma status}
+\item{disease}{Disease status 1=case 0=control}
 ...
 }
 }
-}
-\source{
-\url{https://www.epic-norfolk.org.uk}
 }
 \usage{
 PRSdata
 }
 \description{
-A subset of data from the EPIC-Norfolk study
+A synthetic dataset adapted from published data
 }
 \keyword{datasets}

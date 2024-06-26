@@ -2,10 +2,10 @@
 #' A function to draw a quantile plot comparing cases and controls by PRS
 #'
 #' @param PRSdata A dataframe which includes an exposure and outcome
-#' @param exposure A character string containing the name of the polygenic risk score 
+#' @param exposure A character string containing the name of the polygenic risk score
 #' @param outcome A character string containing the name of the outcome variable
 #' @param covariates A character string containing a comma separated variable list of covariates
-#' @param nquantiles Number of quantiles 
+#' @param nquantiles Number of quantiles
 #'
 #' @return
 #' @export
