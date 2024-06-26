@@ -24,8 +24,8 @@ prs_models <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nq
               dplyr::mutate(!!qExposure := statar::xtile(!!as.name(exposure),nquantiles)) %>%
               dplyr::mutate(!!QExposure := !!as.name(qExposure))
    N <- PRSdata %>% dplyr::count()
-   NCase <- PRSdata %>% dplyr::filter(!!as.name(outcome)=="POAG") %>% dplyr::count()
-   NControl <- PRSdata %>% dplyr::filter(!!as.name(outcome)=="Control") %>% dplyr::count()
+   NCase <- PRSdata %>% dplyr::filter(!!as.name(outcome)=="1") %>% dplyr::count()
+   NControl <- PRSdata %>% dplyr::filter(!!as.name(outcome)=="0") %>% dplyr::count()
 
    # Construct models B=Base model, U=Unadjusted model Q=Quantile model C=Continuous model D=Duo (two inputs)
    if(is.na(comparison)) {
@@ -88,7 +88,7 @@ prs_models <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nq
    DelongPValue <- exp_sup(Delong$p.value)
    DelongROC1  <- Delong$roc1$auc
    DelongROC2  <- Delong$roc2$auc
-   TitleText <- paste0("Polygenic risk score from \"",exposure,"\" and ",outcome," for ",NCase," cases and ",NControl," controls in EPIC-Norfolk")
+   TitleText <- paste0("Polygenic risk score from \"",exposure,"\" and ",outcome," for ",NCase," cases and ",NControl," controls")
    TidyCText <- TidyC %>% dplyr::filter(term=="`Risk score`") %>% dplyr::select(p.value) %>% dplyr::pull()
    TidyCText <- exp_sup(TidyCText)
    TidyQText <- TidyQT %>% dplyr::filter(term=="`p-trend`") %>% dplyr::select(p.value) %>% dplyr::pull()
