@@ -11,8 +11,8 @@
 #' @export
 #'
 #' @examples
-#' prs_models_NEW(PRSdata,exposure="prs",outcome="disease",covariates="age,sex",nquantiles=10)
-prs_models_NEW <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nquantiles) {
+#' prs_models(PRSdata,exposure="prs",outcome="disease",covariates="age,sex",nquantiles=10)
+prs_models <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nquantiles) {
    qExposure <- paste0("q",exposure)
    QExposure <- paste0("Q",exposure)
    comparison_var <- ifelse(is.na(comparison),exposure,comparison)

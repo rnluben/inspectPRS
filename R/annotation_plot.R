@@ -14,7 +14,7 @@
 #' annotation_plot(PRSdata, exposure="prs",outcome="disease", covariates="age,sex", nquantiles=10)
 annotation_plot <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nquantiles ) {
 
-   ModelOutput <- prs_models_NEW(PRSdata, exposure, outcome, covariates, comparison=comparison, nquantiles)
+   ModelOutput <- prs_models(PRSdata, exposure, outcome, covariates, comparison=comparison, nquantiles)
   
    BaseModel_AUROC <- round(ModelOutput$DelongROC1,3)
    ComparisonModel_AUROC <- round(ModelOutput$DelongROC2,3)

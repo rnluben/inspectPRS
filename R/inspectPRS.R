@@ -1,4 +1,4 @@
-#' A patchwork of plots and PRS statistics for an overall summary of a PRS
+#' A patchwork of plots and PRS summary statistics for an overview of Polygenic Risk Scores 
 #'
 #' @param PRSdata A dataframe which includes an exposure and outcome
 #' @param exposure A character string containing the name of the exposure variable
