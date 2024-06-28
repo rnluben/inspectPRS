@@ -13,7 +13,7 @@ prs_models(PRSdata, exposure, outcome, covariates, comparison = NA, nquantiles)
 
 \item{outcome}{Character variable containing name of binary outcome variable}
 
-\item{covariates}{Character variable containing names of covariates}
+\item{covariates}{Character vector containing names of covariates}
 
 \item{comparison}{Character variable containing name a secondary PRS}
 
@@ -27,6 +27,6 @@ Polygenic risk score modelling functions
 }
 \examples{
 \dontrun{
-prs_models(PRSdata,exposure="prs",outcome="disease",covariates="age,sex",nquantiles=10)
+prs_models(PRSdata,exposure="prs",outcome="disease",covariates= c("age", "sex"),nquantiles=10)
 }
 }

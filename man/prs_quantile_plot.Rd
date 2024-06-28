@@ -13,7 +13,7 @@ prs_quantile_plot(PRSdata, exposure, outcome, covariates, nquantiles)
 
 \item{outcome}{A character string containing the name of the outcome variable}
 
-\item{covariates}{A character string containing a comma separated variable list of covariates}
+\item{covariates}{A character vector containing names of covariates}
 
 \item{nquantiles}{Number of quantiles}
 }
@@ -25,6 +25,6 @@ A function to draw a quantile plot comparing cases and controls by PRS
 }
 \examples{
 \dontrun{
-prs_quantile_plot(PRSdata,exposure="prs",outcome="disease",covariates="age,sex",nquantiles=10)
+prs_quantile_plot(PRSdata,exposure="prs",outcome="disease",covariates=c("age","sex"),nquantiles=10)
 }
 }

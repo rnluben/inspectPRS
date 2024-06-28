@@ -27,6 +27,6 @@ A patchwork of plots and PRS summary statistics for an overview of Polygenic Ris
 }
 \examples{
 \dontrun{
-inspectPRS(PRSdata, exposure="prs",outcome="disease",covariates="age,sex",nquantiles=10)
+inspectPRS(PRSdata, exposure="prs",outcome="disease",covariates=c("age", "sex"),nquantiles=10)
 }
 }

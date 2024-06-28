@@ -13,7 +13,7 @@ ggroc_plot(PRSdata, exposure, outcome, covariates, comparison = NA, nquantiles)
 
 \item{outcome}{A character string containing the name of the outcome variable}
 
-\item{covariates}{Character variable containing names of covariates}
+\item{covariates}{Character vector containing names of covariates}
 
 \item{comparison}{Character variable containing name a secondary PRS}
 
@@ -27,6 +27,6 @@ A function to draw a density plot comparing cases and controls by PRS
 }
 \examples{
 \dontrun{
-ggroc_plot(PRSdata, exposure="prs",outcome="disease",covariates="age,sex",nquantiles=10)
+ggroc_plot(PRSdata, exposure="prs",outcome="disease",covariates=c("age", "sex"),nquantiles=10)
 }
 }

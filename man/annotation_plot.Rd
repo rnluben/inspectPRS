@@ -20,7 +20,7 @@ annotation_plot(
 
 \item{outcome}{A character string containing the name of the outcome variable}
 
-\item{covariates}{A character string containing a comma separated variable list of covariates}
+\item{covariates}{A character vector containing names of covariates}
 
 \item{comparison}{A character string which if not NA contains the name of a comparison PRS}
 
@@ -34,6 +34,6 @@ A function to draw a density plot comparing cases and controls by PRS
 }
 \examples{
 \dontrun{
-annotation_plot(PRSdata, exposure="prs",outcome="disease", covariates="age,sex", nquantiles=10)
+annotation_plot(PRSdata, exposure="prs",outcome="disease", covariates=c("age" ,"sex"), nquantiles=10)
 }
 }
