@@ -4,7 +4,14 @@
 \alias{prs_quantile_plot}
 \title{A function to draw a quantile plot comparing cases and controls by PRS}
 \usage{
-prs_quantile_plot(PRSdata, exposure, outcome, covariates, nquantiles)
+prs_quantile_plot(
+  PRSdata,
+  exposure,
+  outcome,
+  covariates,
+  nquantiles,
+  model = NA
+)
 }
 \arguments{
 \item{PRSdata}{A dataframe which includes an exposure and outcome}
@@ -16,6 +23,8 @@ prs_quantile_plot(PRSdata, exposure, outcome, covariates, nquantiles)
 \item{covariates}{A character vector containing names of covariates}
 
 \item{nquantiles}{Number of quantiles}
+
+\item{model}{An existing model object from prs_models}
 }
 \value{
 A ggplot object.

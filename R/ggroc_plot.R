@@ -6,6 +6,7 @@
 #' @param covariates Character vector containing names of covariates
 #' @param comparison Character variable containing name a secondary PRS
 #' @param nquantiles Number of quantiles
+#' @param model An existing model object from prs_models
 #'
 #' @return A ggplot object.
 #' @export

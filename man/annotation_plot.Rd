@@ -10,7 +10,8 @@ annotation_plot(
   outcome,
   covariates,
   comparison = NA,
-  nquantiles
+  nquantiles,
+  model = NA
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ annotation_plot(
 \item{comparison}{A character string which if not NA contains the name of a comparison PRS}
 
 \item{nquantiles}{Number of quantiles}
+
+\item{model}{An existing model object from prs_models}
 }
 \value{
 A ggplot object.

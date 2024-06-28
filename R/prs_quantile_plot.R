@@ -6,6 +6,7 @@
 #' @param outcome A character string containing the name of the outcome variable
 #' @param covariates A character vector containing names of covariates
 #' @param nquantiles Number of quantiles
+#' @param model An existing model object from prs_models 
 #'
 #' @return A ggplot object.
 #' @export

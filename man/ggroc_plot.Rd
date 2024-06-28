@@ -4,7 +4,15 @@
 \alias{ggroc_plot}
 \title{A function to draw a density plot comparing cases and controls by PRS}
 \usage{
-ggroc_plot(PRSdata, exposure, outcome, covariates, comparison = NA, nquantiles)
+ggroc_plot(
+  PRSdata,
+  exposure,
+  outcome,
+  covariates,
+  comparison = NA,
+  model = NA,
+  nquantiles
+)
 }
 \arguments{
 \item{PRSdata}{A dataframe which includes an exposure and outcome}
@@ -16,6 +24,8 @@ ggroc_plot(PRSdata, exposure, outcome, covariates, comparison = NA, nquantiles)
 \item{covariates}{Character vector containing names of covariates}
 
 \item{comparison}{Character variable containing name a secondary PRS}
+
+\item{model}{An existing model object from prs_models}
 
 \item{nquantiles}{Number of quantiles}
 }
