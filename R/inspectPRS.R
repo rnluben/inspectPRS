@@ -16,10 +16,12 @@
 #' }
 inspectPRS <- function(PRSdata, exposure, outcome, covariates, comparison=NA,nquantiles) {
 
+   ModelOutput <- prs_models(PRSdata, exposure, outcome, covariates, comparison=comparison, nquantiles)
+
    plot1 <- prs_density_plot(PRSdata, exposure=exposure,outcome=outcome)
-   plot2 <- ggroc_plot(PRSdata, exposure=exposure,outcome=outcome,covariates=covariates,nquantiles=nquantiles)
-   plot3 <- prs_quantile_plot(PRSdata,exposure=exposure,outcome=outcome,covariates=covariates,nquantiles=nquantiles)
-   plot4 <- annotation_plot(PRSdata, exposure=exposure,outcome=outcome, covariates=covariates, nquantiles=nquantiles)
+   plot2 <- ggroc_plot(PRSdata, exposure=exposure,outcome=outcome,covariates=covariates,nquantiles=nquantiles, model=ModelOutput)
+   plot3 <- prs_quantile_plot(PRSdata,exposure=exposure,outcome=outcome,covariates=covariates,nquantiles=nquantiles, model=ModelOutput)
+   plot4 <- annotation_plot(PRSdata, exposure=exposure,outcome=outcome, covariates=covariates, nquantiles=nquantiles, model=ModelOutput)
 
    CombinedPlot <- patchwork::wrap_plots(plot1, plot2, plot3, plot4, ncol = 2) +
                    patchwork::plot_annotation(title = paste("PRS: ",exposure), theme = ggplot2::theme(plot.title = ggplot2::element_text(size = 26, hjust = 0.5)))

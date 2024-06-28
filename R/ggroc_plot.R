@@ -14,9 +14,13 @@
 #' \dontrun{
 #' ggroc_plot(PRSdata, exposure="prs",outcome="disease",covariates=c("age", "sex"),nquantiles=10)
 #' }
-ggroc_plot <- function(PRSdata, exposure, outcome, covariates, comparison=NA,nquantiles) {
+ggroc_plot <- function(PRSdata, exposure, outcome, covariates, comparison=NA, model=NA, nquantiles) {
 
-   ModelOutput <- prs_models(PRSdata, exposure, outcome, covariates, comparison=comparison, nquantiles)
+   if(any(is.na(model))) {
+      ModelOutput <- prs_models(PRSdata, exposure, outcome, covariates, comparison=comparison, nquantiles)
+   } else {
+      ModelOutput=model
+   }
 
    ggROC_C <- pROC::ggroc(ModelOutput$ROC_C) +  ggplot2::geom_text(data =ModelOutput$AUCLabel, ggplot2::aes(0.5, 1,label = paste(label_AUC)), hjust = 1)
    ggROC_B <- pROC::ggroc(ModelOutput$ROC_B) +  ggplot2::geom_text(data =ModelOutput$AUCLabel, ggplot2::aes(0.5, 1,label = paste(label_AUC)), hjust = 1)

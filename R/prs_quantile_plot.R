@@ -14,9 +14,13 @@
 #' \dontrun{
 #' prs_quantile_plot(PRSdata,exposure="prs",outcome="disease",covariates=c("age","sex"),nquantiles=10)
 #' }
-prs_quantile_plot <- function(PRSdata,exposure,outcome,covariates,nquantiles) {
+prs_quantile_plot <- function(PRSdata,exposure,outcome,covariates,nquantiles,model=NA) {
 
-   ModelOutput <- prs_models(PRSdata, exposure, outcome, covariates, comparison=NA, nquantiles)
+   if(any(is.na(model))) { 
+      ModelOutput <- prs_models(PRSdata, exposure, outcome, covariates, comparison=NA, nquantiles)
+   } else {
+      ModelOutput=model
+   }
 
    QuantilePlot <- ModelOutput$TidyOut %>%
                dplyr::filter(qPRS!="All") %>%

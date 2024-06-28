@@ -14,9 +14,13 @@
 #' \dontrun{
 #' annotation_plot(PRSdata, exposure="prs",outcome="disease", covariates=c("age" ,"sex"), nquantiles=10)
 #' }
-annotation_plot <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nquantiles ) {
+annotation_plot <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nquantiles, model=NA) {
 
-   ModelOutput <- prs_models(PRSdata, exposure, outcome, covariates, comparison=comparison, nquantiles)
+   if(any(is.na(model))) {
+      ModelOutput <- prs_models(PRSdata, exposure, outcome, covariates, comparison=comparison, nquantiles)
+   } else {
+      ModelOutput=model
+   }
 
    BaseModel_AUROC <- round(ModelOutput$DelongROC1,3)
    ComparisonModel_AUROC <- round(ModelOutput$DelongROC2,3)
