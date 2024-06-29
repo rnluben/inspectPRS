@@ -102,8 +102,14 @@ prs_models <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nq
 
 
    ReturnList <- structure(list(TidyOut=TidyOut,TidyCText=TidyCText, TidyQText=TidyQText, AUCLabel=AUCLabel, DelongPValue=DelongPValue, DelongROC1=DelongROC1, DelongROC2=DelongROC2, NCase=NCase,NControl=NControl, ROC_C=ROC_C,ROC_B=ROC_B,ModelBLabel=ModelBLabel,ModelCLabel=ModelCLabel,
-                      params = list(exposure = exposure, outcome = outcome, covariates = covariates, comparison = comparison, nquantiles = nquantiles)),
+                      params = list(exposure = exposure, outcome = outcome, covariates = covariates, comparison = comparison, nquantiles = nquantiles),
+                      TitleText =TitleText),
                       class = "prsModel")
    return(ReturnList)
 }
 
+#' @export
+print.prsModel <- function(prsModel) {
+  cat(prsModel$TitleText)
+  print(prsModel$AUCLabel)
+}

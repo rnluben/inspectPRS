@@ -2,6 +2,7 @@
 
 S3method(annotation_plot,prsModel)
 S3method(ggroc_plot,prsModel)
+S3method(print,prsModel)
 S3method(prs_quantile_plot,prsModel)
 export("%>%")
 export(annotation_plot)
