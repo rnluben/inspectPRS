@@ -1,22 +1,19 @@
 
 #' A function to draw a quantile plot comparing cases and controls by PRS
 #'
-#' @param PRSdata A dataframe which includes an exposure and outcome
-#' @param exposure A character string containing the name of the polygenic risk score
-#' @param outcome A character string containing the name of the outcome variable
-#' @param covariates A character vector containing names of covariates
-#' @param nquantiles Number of quantiles
+#' @inheritParams annotation_plot
 #'
 #' @return A ggplot object.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' prs_quantile_plot(PRSdata,exposure="prs",outcome="disease",covariates=c("age","sex"),nquantiles=10)
+#' prs_models(PRSdata,exposure="prs",outcome="disease",covariates=c("age","sex"),nquantiles=10) |>
+#'   prs_quantile_plot()
 #' }
-prs_quantile_plot <- function(PRSdata,exposure,outcome,covariates,nquantiles) {
+prs_quantile_plot <- function(prsModel) {
 
-   ModelOutput <- prs_models(PRSdata, exposure, outcome, covariates, comparison=NA, nquantiles)
+   ModelOutput <- prsModel
 
    QuantilePlot <- ModelOutput$TidyOut %>%
                dplyr::filter(qPRS!="All") %>%
@@ -29,6 +26,6 @@ prs_quantile_plot <- function(PRSdata,exposure,outcome,covariates,nquantiles) {
                       ggplot2::scale_y_log10() +
                       ggplot2::theme(axis.title.x = ggplot2::element_text(margin = ggplot2::margin(t = 20, r = 20, b = 0, l = 0))) +
                       ggplot2::theme(text = ggplot2::element_text(size = 20)) +
-                      ggplot2::xlab(paste0("Quantiles of PRS \"",{{exposure}},"\""))
+                      ggplot2::xlab(paste0("Quantiles of PRS \"",ModelOutput$params$exposure,"\""))
    return(QuantilePlot)
 }
