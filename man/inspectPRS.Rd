@@ -7,13 +7,13 @@
 inspectPRS(PRSdata, exposure, outcome, covariates, comparison = NA, nquantiles)
 }
 \arguments{
-\item{PRSdata}{A dataframe which includes an exposure and outcome}
+\item{PRSdata}{Data frame containing exposure and outcome}
 
-\item{exposure}{A character string containing the name of the exposure variable}
+\item{exposure}{Character variable containing name of polygenic risk score variable}
 
-\item{outcome}{A character string containing the name of the outcome variable}
+\item{outcome}{Character variable containing name of binary outcome variable}
 
-\item{covariates}{Character variable containing names of covariates}
+\item{covariates}{Character vector containing names of covariates}
 
 \item{comparison}{Character variable containing name a secondary PRS}
 
@@ -27,6 +27,6 @@ A patchwork of plots and PRS summary statistics for an overview of Polygenic Ris
 }
 \examples{
 \dontrun{
-inspectPRS(PRSdata, exposure="prs",outcome="disease",covariates="age,sex",nquantiles=10)
+inspectPRS(PRSdata, exposure="prs",outcome="disease",covariates=c("age", "sex"),nquantiles=10)
 }
 }
