@@ -11,6 +11,12 @@
 #'   ggroc_plot()
 #' }
 ggroc_plot <- function(prsModel) {
+  UseMethod("ggroc_plot")
+}
+
+
+#' @export
+ggroc_plot.prsModel <- function(prsModel) {
 
    ModelOutput <- prsModel
 

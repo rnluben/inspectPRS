@@ -11,6 +11,12 @@
 #'   annotation_plot()
 #' }
 annotation_plot <- function(prsModel) {
+  UseMethod("annotation_plot")
+}
+
+
+#' @export
+annotation_plot.prsModel <- function(prsModel) {
 
    ModelOutput <- prsModel
 
@@ -28,3 +34,5 @@ annotation_plot <- function(prsModel) {
    ggAnnotate <- ggplot2::ggplot() + ggplot2::annotate(geom=Geom_RT, x = 10, y = 10,size = 6,label = Annotation) + ggplot2::theme_bw() + ggplot2::labs(color='') + ggplot2::theme_void()
    return(ggAnnotate)
 }
+
+

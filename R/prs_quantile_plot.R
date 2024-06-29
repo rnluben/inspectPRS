@@ -12,6 +12,11 @@
 #'   prs_quantile_plot()
 #' }
 prs_quantile_plot <- function(prsModel) {
+  UseMethod("prs_quantile_plot")
+}
+
+#' @export
+prs_quantile_plot.prsModel <- function(prsModel) {
 
    ModelOutput <- prsModel
 

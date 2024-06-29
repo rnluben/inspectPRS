@@ -20,7 +20,7 @@ prs_models(PRSdata, exposure, outcome, covariates, comparison = NA, nquantiles)
 \item{nquantiles}{Number of quantiles}
 }
 \value{
-A list.
+A prsModel object.
 }
 \description{
 Polygenic risk score modelling functions
