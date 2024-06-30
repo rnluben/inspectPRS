@@ -113,3 +113,15 @@ print.prsModel <- function(prsModel) {
   cat(prsModel$TitleText)
   print(prsModel$AUCLabel)
 }
+
+#' @export
+plot.prsModel <- function(prsModel) {
+
+    plot2 <- ggroc_plot(prsModel)
+    plot3 <- prs_quantile_plot(prsModel)
+    plot4 <- annotation_plot(prsModel)
+
+    CombinedPlot <- (plot2 | plot3) / plot4 +
+      patchwork::plot_annotation(title = paste("PRS: ",prsModel$params$exposure), theme = ggplot2::theme(plot.title = ggplot2::element_text(size = 26, hjust = 0.5)))
+    return(CombinedPlot)
+}
