@@ -32,12 +32,12 @@ prs_models <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nq
    if(is.na(comparison)) {
       PRSdataB <- PRSdata %>% dplyr::select(OUTCOME={{outcome}}, {{covariates}})
       ModelB <- stats::glm(OUTCOME ~ ., data=PRSdataB, family = stats::binomial)
-      ModelBLabel <- stringr::str_replace_all(covariates,","," and ")
+      ModelBLabel <- paste0(covariates,collapse=" and ")
       comparison_name <- ""
    } else {
       PRSdataB <- PRSdata %>% dplyr::select(`Risk score`= {{comparison_var}}, OUTCOME={{outcome}},{{covariates}})
       ModelB <- stats::glm(OUTCOME ~ ., data=PRSdataB, family = stats::binomial)
-      ModelBLabel <- paste0(comparison,", ",stringr::str_replace_all(covariates,","," and "))
+      ModelBLabel <- paste0(comparison,", ",paste0(covariates,collapse=" and "))
       comparison_name <- paste0("_",comparison)
    }
    ModelU <- PRSdata %>% dplyr::select(`Risk score`=dplyr::all_of(qExposure), OUTCOME={{outcome}}, QQ=dplyr::all_of(QExposure)) %>%
@@ -50,7 +50,7 @@ prs_models <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nq
                          stats::glm(OUTCOME ~ ., data=., family = stats::binomial)
    PRSdataC <- PRSdata %>% dplyr::select(`Risk score`= {{exposure}}, OUTCOME={{outcome}},{{covariates}})
    ModelC <-             stats::glm(OUTCOME ~ ., data=PRSdataC, family = stats::binomial)
-   ModelCLabel <- paste0(exposure,", ",stringr::str_replace_all(covariates,","," and "))
+   ModelCLabel <- paste0(exposure,covariates,collapse=" and ")
    ModelQT <- PRSdata %>% dplyr::select(`p-trend`= dplyr::all_of(QExposure), OUTCOME={{outcome}},{{covariates}}) %>%
                           stats::glm(OUTCOME ~ ., data=., family = stats::binomial)
 
