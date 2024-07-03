@@ -50,7 +50,7 @@ prs_models <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nq
                          stats::glm(OUTCOME ~ ., data=., family = stats::binomial)
    PRSdataC <- PRSdata %>% dplyr::select(`Risk score`= {{exposure}}, OUTCOME={{outcome}},{{covariates}})
    ModelC <-             stats::glm(OUTCOME ~ ., data=PRSdataC, family = stats::binomial)
-   ModelCLabel <- paste0(exposure,covariates,collapse=" and ")
+   ModelCLabel <-  paste(exposure,paste(covariates,collapse=" and "),sep=",")
    ModelQT <- PRSdata %>% dplyr::select(`p-trend`= dplyr::all_of(QExposure), OUTCOME={{outcome}},{{covariates}}) %>%
                           stats::glm(OUTCOME ~ ., data=., family = stats::binomial)
 
