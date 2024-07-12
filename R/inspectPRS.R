@@ -13,7 +13,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' inspectPRS(PRSdata, exposure="prs",outcome="disease",covariates=c("age", "sex"),nquantiles=10)
+#' inspectPRS(PRSdata, exposure="prs",outcome="disease",covariates=c("age", "sex"),nquantiles=10, reporttitle="PRS using toy data")
 #' }
 inspectPRS <- function(PRSdata, exposure, outcome, covariates, comparison=NA,nquantiles,reporttitle=NA) {
 
