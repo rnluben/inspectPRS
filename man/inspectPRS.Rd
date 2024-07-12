@@ -4,7 +4,15 @@
 \alias{inspectPRS}
 \title{A patchwork of plots and PRS summary statistics for an overview of Polygenic Risk Scores}
 \usage{
-inspectPRS(PRSdata, exposure, outcome, covariates, comparison = NA, nquantiles)
+inspectPRS(
+  PRSdata,
+  exposure,
+  outcome,
+  covariates,
+  comparison = NA,
+  nquantiles,
+  reporttitle = NA
+)
 }
 \arguments{
 \item{PRSdata}{A dataframe which includes an exposure and outcome}
@@ -18,6 +26,8 @@ inspectPRS(PRSdata, exposure, outcome, covariates, comparison = NA, nquantiles)
 \item{comparison}{Character variable containing name a secondary PRS}
 
 \item{nquantiles}{Number of quantiles}
+
+\item{reporttitle}{A character string containing the report title}
 }
 \value{
 A patchwork ggplot object.
@@ -27,6 +37,6 @@ A patchwork of plots and PRS summary statistics for an overview of Polygenic Ris
 }
 \examples{
 \dontrun{
-inspectPRS(PRSdata, exposure="prs",outcome="disease",covariates=c("age", "sex"),nquantiles=10)
+inspectPRS(PRSdata, exposure="prs",outcome="disease",covariates=c("age", "sex"),nquantiles=10,reportitle("Toy PRS example"))
 }
 }

@@ -17,7 +17,7 @@
 #' }
 inspectPRS <- function(PRSdata, exposure, outcome, covariates, comparison=NA,nquantiles,reporttitle=NA) {
 
-   reporttitle <- ifelse(is.na(title),paste("PRS: ",exposure),reporttitle)
+   reporttitle <- ifelse(is.na(reporttitle),paste("PRS: ",exposure),reporttitle)
    ModelOutput <- prs_models(PRSdata, exposure, outcome, covariates, comparison=comparison, nquantiles)
 
    plot1 <- prs_density_plot(PRSdata, exposure=exposure,outcome=outcome)
