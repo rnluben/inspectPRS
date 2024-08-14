@@ -107,7 +107,7 @@ prs_models <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nq
                dplyr::bind_rows(.id = "name") %>%
                dplyr::mutate(name = paste0("PRS: ", exposure," Outcome: ",outcome," adjusted for ",ModelBLabel))
 
-   ReturnList <- list(TidyOut=TidyOut,TidyCText=TidyCText, TidyQText=TidyQText, AUCLabel=AUCLabel, DelongPValue=DelongPValue, DelongROC1=DelongROC1, DelongROC2=DelongROC2, NCase=NCase,NControl=NControl, ROC_C=ROC_C,ROC_B=ROC_B,ModelBLabel=ModelBLabel,ModelCLabel=ModelCLabel,PRSdataB=PRSdataB,PRSdataC=PRSdataC,ModelB=ModelB,ModelC=ModelC,TidyB=TidyB,TidyC=TidyC)
+   ReturnList <- list(TidyOut=TidyOut,TidyCText=TidyCText, TidyQText=TidyQText, AUCLabel=AUCLabel, DelongPValue=DelongPValue, DelongROC1=DelongROC1, DelongROC2=DelongROC2, NCase=NCase,NControl=NControl, ROC_C=ROC_C,ROC_B=ROC_B,ModelBLabel=ModelBLabel,ModelCLabel=ModelCLabel,PRSdataB=PRSdataB,PRSdataC=PRSdataC,ModelB=ModelB,ModelC=ModelC,TidyC=TidyC)
    return(ReturnList)
 }
 
