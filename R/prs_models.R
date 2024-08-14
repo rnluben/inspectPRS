@@ -80,6 +80,13 @@ prs_models <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nq
    ROC_B <- PRSdataB %>% pROC::roc(OUTCOME ~ PredictB, data = .)
    CI_B <- pROC::ci.auc(ROC_B, method="bootstrap")
 
+# Precision recall curves
+   # PRC_C_pred <- ROCR::prediction(PRSdataC$PredictC, PRSdataC$OUTCOME)
+   # PRC_B_pred <- ROCR::prediction(PRSdataB$PredictB, PRSdataB$OUTCOME)
+   # PRC_C_perf <- ROCR::performance(PRC_C_pred, "prec", "rec")
+   # PRC_B_perf <- ROCR::performance(PRC_B_pred, "prec", "rec")
+   # auprc <- performance(PRC_C_pred, measure = "auc", x.measure = "rec", y.measure = "prec")@y.values[[1]]
+
    # Test difference in ROC curves.  Methods bootstrap, venkatraman and specificity all give similar results
    BASE <- ROC_B
    BASEPRS <- ROC_C
@@ -98,8 +105,7 @@ prs_models <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nq
    AUCLabel <- ROC_C$auc %>% tibble::as_tibble() %>%
                dplyr::mutate(label_AUC = paste0("AUC = ",round(value,4))) %>%
                dplyr::bind_rows(.id = "name") %>%
-               dplyr::mutate(name = paste0("PRS: ", exposure," Outcome: ",outcome," adjusted for age and sex"))
-
+               dplyr::mutate(name = paste0("PRS: ", exposure," Outcome: ",outcome," adjusted for ",ModelBLabel))
 
    ReturnList <- list(TidyOut=TidyOut,TidyCText=TidyCText, TidyQText=TidyQText, AUCLabel=AUCLabel, DelongPValue=DelongPValue, DelongROC1=DelongROC1, DelongROC2=DelongROC2, NCase=NCase,NControl=NControl, ROC_C=ROC_C,ROC_B=ROC_B,ModelBLabel=ModelBLabel,ModelCLabel=ModelCLabel,PRSdataB=PRSdataB,PRSdataC=PRSdataC)
    return(ReturnList)
