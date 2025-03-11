@@ -19,8 +19,8 @@ prs_density_plot <- function(PRSdata, exposure, outcome) {
                   ggplot2::ggplot(ggplot2::aes(x = EXPOSURE, colour = OUTCOME)) +
                          ggplot2::geom_density() +
                          ggplot2::theme_bw() +
-                         ggplot2::labs(x = "density\n", color='') +
-                         scale_color_manual(labels = c("Controls", outcome), values = c(0, 1)) +
+                         ggplot2::labs(x = "density\n\n", color='') +
+                         scale_color_manual(labels = c("Controls", outcome), values = c(1, 2)) +
                          ggplot2::theme(text = ggplot2::element_text(size = 20)) +
                          ggplot2::xlab(paste0("PRS \"",{{exposure}},"\"")) + 
                          theme(legend.position="bottom")
