@@ -27,7 +27,9 @@ annotation_plot <- function(PRSdata, exposure, outcome, covariates, comparison=N
    ComparisonModel_AUROC <- round(ModelOutput$DelongROC2,3)
 
    Annotation <- paste0("PRS ",exposure," and outcome ",outcome,
-                        "<br><br>[A] Comparison of PRS in cases and controls P = ",ModelOutput$TidyCText,
+                        "<br><br>[A] Comparison of PRS in cases and controls 
+                        "<br>Unadjusted P = ",ModelOutput$TidyDText,
+                        "<br>Adjusted P = ",ModelOutput$TidyCText,
                         "<br><br>[B] Test accuracy using area under receiver operating curves",
                         "<br>Base model: ",BaseModel_AUROC,
                         "<br>Comparison model: ",ComparisonModel_AUROC,

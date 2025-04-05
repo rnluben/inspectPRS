@@ -49,14 +49,18 @@ prs_models <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nq
                          dplyr::mutate(`Risk score` = forcats::fct_reorder(`Risk score`, QQ)) %>% dplyr::select(-QQ) %>%
                          stats::glm(OUTCOME ~ ., data=., family = stats::binomial)
    PRSdataC <- PRSdata %>% dplyr::select(`Risk score`= {{exposure}}, OUTCOME={{outcome}},{{covariates}})
+   PRSdataD <- PRSdata %>% dplyr::select(`Risk score`= {{exposure}}, OUTCOME={{outcome}})
    ModelC <-             stats::glm(OUTCOME ~ ., data=PRSdataC, family = stats::binomial)
+   ModelD <-             stats::glm(OUTCOME ~ ., data=PRSdataD, family = stats::binomial)
    ModelCLabel <-  paste(exposure,paste(covariates,collapse=" and "),sep=",")
+   ModelDLabel <-  exposure
    ModelQT <- PRSdata %>% dplyr::select(`p-trend`= dplyr::all_of(QExposure), OUTCOME={{outcome}},{{covariates}}) %>%
                           stats::glm(OUTCOME ~ ., data=., family = stats::binomial)
 
    N_PRS <- PRSdata %>% dplyr::filter(!is.na({{outcome}})) %>% dplyr::count(!!as.name(qExposure)) %>% dplyr::mutate(qPRS = paste0("Q",!!as.name(qExposure)))
    N_PRS <- PRSdata %>% dplyr::filter(!is.na({{outcome}})) %>% dplyr::count() %>% dplyr::mutate(qPRS="All") %>% dplyr::bind_rows(N_PRS,.)
    TidyC <- broom::tidy(ModelC)
+   TidyD <- broom::tidy(ModelD)
    TidyU <- broom::tidy(ModelU)
    TidyQ <- broom::tidy(ModelQ, conf.int = TRUE, exp = TRUE)
    TidyQT <- broom::tidy(ModelQT, conf.int = TRUE, exp = TRUE) %>% dplyr::filter(term=="`p-trend`")
@@ -72,6 +76,7 @@ prs_models <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nq
 
    PRSdataB <- PRSdataB %>% modelr::add_predictions(ModelB) %>% dplyr::rename(PredictB=pred)
    PRSdataC <- PRSdataC %>% modelr::add_predictions(ModelC) %>% dplyr::rename(PredictC=pred)
+   PRSdataD <- PRSdataD %>% modelr::add_predictions(ModelD) %>% dplyr::rename(PredictD=pred)
 #  PRSdata$PredictB <- stats::predict(ModelB, type="response")  # Check that specifying newdata=PRS is necessary !!
 #  PRSdata$PredictC <- stats::predict(ModelC, type="response")
 
@@ -99,6 +104,8 @@ prs_models <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nq
    TitleText <- paste0("Polygenic risk score from \"",exposure,"\" and ",outcome," for ",NCase," cases and ",NControl," controls")
    TidyCText <- TidyC %>% dplyr::filter(term=="`Risk score`") %>% dplyr::select(p.value) %>% dplyr::pull()
    TidyCText <- exp_sup(TidyCText)
+   TidyDText <- TidyD %>% dplyr::filter(term=="`Risk score`") %>% dplyr::select(p.value) %>% dplyr::pull()
+   TidyDText <- exp_sup(TidyDText)
    TidyQText <- TidyQT %>% dplyr::filter(term=="`p-trend`") %>% dplyr::select(p.value) %>% dplyr::pull()
    TidyQText <- exp_sup(TidyQText)
 
@@ -107,7 +114,7 @@ prs_models <- function(PRSdata, exposure, outcome, covariates, comparison=NA, nq
                dplyr::bind_rows(.id = "name") %>%
                dplyr::mutate(name = paste0("PRS: ", exposure," Outcome: ",outcome," adjusted for ",ModelBLabel))
 
-   ReturnList <- list(TidyOut=TidyOut,TidyCText=TidyCText, TidyQText=TidyQText, AUCLabel=AUCLabel, DelongPValue=DelongPValue, DelongROC1=DelongROC1, DelongROC2=DelongROC2, NCase=NCase,NControl=NControl, ROC_C=ROC_C,ROC_B=ROC_B,ModelBLabel=ModelBLabel,ModelCLabel=ModelCLabel,PRSdataB=PRSdataB,PRSdataC=PRSdataC,ModelB=ModelB,ModelC=ModelC,TidyC=TidyC)
+   ReturnList <- list(TidyOut=TidyOut,TidyCText=TidyCText, TidyQText=TidyQText, AUCLabel=AUCLabel, DelongPValue=DelongPValue, DelongROC1=DelongROC1, DelongROC2=DelongROC2, NCase=NCase,NControl=NControl, ROC_C=ROC_C,ROC_B=ROC_B,ModelBLabel=ModelBLabel,ModelCLabel=ModelCLabel,PRSdataB=PRSdataB,PRSdataC=PRSdataC,PRSdataD=PRSdataD, ModelB=ModelB,ModelC=ModelC,TidyC=TidyC)
    return(ReturnList)
 }
 
